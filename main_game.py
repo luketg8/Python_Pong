@@ -8,13 +8,13 @@ from kivy.clock import Clock
 class PongPaddle(Widget):
     score = NumericProperty(0)
 
-    def bounce_ball(self, ball):
+    def bounce_ball(self, ball, velocity_multiplier):
         if self.collide_widget(ball):
             vx, vy = ball.velocity
             offset = (ball.center_y - self.center_y) / (self.height / 2)
             bounced = Vector(-1 * vx, vy)
             if (bounced.x < 8):
-                vel = bounced * 1.1
+                vel = bounced * velocity_multiplier
                 ball.velocity = vel.x, vel.y + offset
             else:
                 ball.velocity = bounced.x, bounced.y + offset
@@ -38,12 +38,15 @@ class ChallengingPongBall(Widget):
 
 
 class PongGame(Widget):
-    def __init__(self, difficulty):
-        self.difficulty = difficulty
-
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
+
+    def set_difficulty(self, difficulty):
+        self.difficulty = difficulty
+        #divide the size of the ball by the difficulty (higher difficulty, lower size)
+        self.ball.size = [x / difficulty for x in self.ball.size]
+        self.velocity_multiplier = 1 + (difficulty *.1)
 
     def serve_ball(self, vel=(4, 0)):
         self.ball.center = self.center
@@ -53,8 +56,8 @@ class PongGame(Widget):
         self.ball.move()
 
         # bounce of paddles
-        self.player1.bounce_ball(self.ball)
-        self.player2.bounce_ball(self.ball)
+        self.player1.bounce_ball(self.ball, self.velocity_multiplier)
+        self.player2.bounce_ball(self.ball, self.velocity_multiplier)
 
         # bounce ball off bottom or top
         if (self.ball.y < self.y) or (self.ball.top > self.top):
@@ -77,7 +80,8 @@ class PongGame(Widget):
 
 class PongApp(App):
     def build(self):
-        game = PongGame(2)
+        game = PongGame()
+        game.set_difficulty(3)
         game.serve_ball()
         Clock.schedule_interval(game.update, 1.0 / 60.0)
         return game

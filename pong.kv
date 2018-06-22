@@ -5,14 +5,7 @@
     canvas:
         Ellipse:
             pos: self.pos
-            size: self.size       
-
-<ChallengingPongBall>:
-    size: 25, 25 
-    canvas:
-        Ellipse:
-            pos: self.pos
-            size: self.size   
+            size: self.size      
 
 <PongPaddle>:
     size: 25, 200
@@ -47,10 +40,6 @@
         id: pong_ball
         center: self.parent.center
 
-    ChallengingPongBall:
-        id: challenging_ball
-        center: self.parent.center
-        
     PongPaddle:
         id: player_left
         x: root.x
