@@ -1,4 +1,5 @@
 from kivy.app import App
+from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
 from kivy.vector import Vector
@@ -13,7 +14,8 @@ class PongPaddle(Widget):
             vx, vy = ball.velocity
             offset = (ball.center_y - self.center_y) / (self.height / 2)
             bounced = Vector(-1 * vx, vy)
-            if (bounced.x < 6):
+            
+            if (bounced.x < 8 and bounced.x > -8):
                 vel = bounced * velocity_multiplier
                 ball.velocity = vel.x, vel.y + offset
             else:
@@ -77,14 +79,38 @@ class PongGame(Widget):
         if touch.x > self.width - self.width / 3:
             self.player2.center_y = touch.y
 
+class PongMenu(Widget):
+    easy = ObjectProperty(None)
+    hard = ObjectProperty(None)
+
+    def set_easy(self):
+        #start the game with an easy difficulty
+        game = PongGameBuilder()
+        game.set_difficulty(1)
+        game.run()
+
+    def set_hard(self):
+        #start the game with a hard difficulty
+        game = PongGameBuilder()
+        game.set_difficulty(2)
+        game.run()
+
+class PongGameBuilder(App):
+    def build(self):
+        game = PongGame()
+        game.set_difficulty(self.difficulty)
+        game.serve_ball()
+        Clock.schedule_interval(game.update, 1.0 / 60.0)
+        self.popup = Popup(title='Pong', content=game, auto_dismiss=False)
+        self.popup.open()
+        
+    def set_difficulty(self, difficulty):
+        self.difficulty = difficulty
 
 class PongApp(App):
     def build(self):
-        game = PongGame()
-        game.set_difficulty(3)
-        game.serve_ball()
-        Clock.schedule_interval(game.update, 1.0 / 60.0)
-        return game
+        menu = PongMenu()
+        return menu
 
 
 if __name__ == '__main__':
