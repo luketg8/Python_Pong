@@ -17,11 +17,12 @@
 <PongMenu>:
     easy: easy_difficulty
     hard: hard_difficulty
+    paddle_slider: paddle_height
 
     Label:
         font_size: 70  
         center_x: root.width / 2
-        top: root.top - (root.height/4)
+        top: root.top - (root.height/10)
         text: str("Welcome to Pong")
 
     Button:
@@ -31,7 +32,7 @@
         center_x: root.width / 2
         background_normal: ''
         background_color: 0, 1, 0, 1
-        top: root.top - (root.height/2)
+        top: root.top - (root.height/3)
         text: str("Easy")
 
     Button:
@@ -41,8 +42,19 @@
         background_normal: ''
         background_color: 1, 0, 0, 1.
         center_x: root.width / 2
-        top: root.top - (root.height/1.25)
+        top: root.top - (root.height/1.75)
         text: str("Hard")
+
+    Label:
+        center_x: root.width / 2
+        top: root.top - (root.height/1.35)
+        text: str("Set the height of the paddles")
+
+    Slider:
+        id: paddle_height
+        min: 150
+        max: 400
+        center_x: root.width / 2
 
 <PongGame>:
     ball: pong_ball

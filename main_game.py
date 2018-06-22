@@ -50,6 +50,10 @@ class PongGame(Widget):
         self.ball.size = [x / difficulty for x in self.ball.size]
         self.velocity_multiplier = 1 + (difficulty *.1)
 
+    def set_paddle_height(self, height):
+        self.player1.size = (25, height)
+        self.player2.size = (25, height)
+
     def serve_ball(self, vel=(4, 0)):
         self.ball.center = self.center
         self.ball.velocity = vel
@@ -82,23 +86,27 @@ class PongGame(Widget):
 class PongMenu(Widget):
     easy = ObjectProperty(None)
     hard = ObjectProperty(None)
+    paddle_slider = ObjectProperty(None)
 
     def set_easy(self):
         #start the game with an easy difficulty
         game = PongGameBuilder()
         game.set_difficulty(1)
+        game.set_paddle_height(self.paddle_slider.value)
         game.run()
 
     def set_hard(self):
         #start the game with a hard difficulty
         game = PongGameBuilder()
         game.set_difficulty(2)
+        game.set_paddle_height(self.paddle_slider.value)
         game.run()
 
 class PongGameBuilder(App):
     def build(self):
         game = PongGame()
         game.set_difficulty(self.difficulty)
+        game.set_paddle_height(self.paddle_height)
         game.serve_ball()
         Clock.schedule_interval(game.update, 1.0 / 60.0)
         self.popup = Popup(title='Pong', content=game, auto_dismiss=False)
@@ -106,6 +114,9 @@ class PongGameBuilder(App):
         
     def set_difficulty(self, difficulty):
         self.difficulty = difficulty
+
+    def set_paddle_height(self, height):
+        self.paddle_height = height
 
 class PongApp(App):
     def build(self):
