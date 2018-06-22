@@ -1,13 +1,14 @@
 from kivy.app import App
 from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
-from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
+from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, StringProperty
 from kivy.vector import Vector
 from kivy.clock import Clock
 
 
 class PongPaddle(Widget):
     score = NumericProperty(0)
+    name = StringProperty('')
 
     def bounce_ball(self, ball, velocity_multiplier):
         if self.collide_widget(ball):
@@ -44,15 +45,21 @@ class PongGame(Widget):
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
 
-    def set_difficulty(self, difficulty):
+    def initialise(self, difficulty, height, playername):
         self.difficulty = difficulty
         #divide the size of the ball by the difficulty (higher difficulty, lower size)
         self.ball.size = [x / difficulty for x in self.ball.size]
         self.velocity_multiplier = 1 + (difficulty *.1)
 
-    def set_paddle_height(self, height):
+        #set the height of the paddles
         self.player1.size = (25, height)
         self.player2.size = (25, height)
+
+        #set the name of the player
+        self.player1.name = playername
+
+        #start the game
+        self.serve_ball()
 
     def serve_ball(self, vel=(4, 0)):
         self.ball.center = self.center
@@ -84,33 +91,42 @@ class PongGame(Widget):
             self.player2.center_y = touch.y
 
 class PongMenu(Widget):
-    easy = ObjectProperty(None)
-    hard = ObjectProperty(None)
-    paddle_slider = ObjectProperty(None)
-
     def set_easy(self):
         #start the game with an easy difficulty
         game = PongGameBuilder()
+
+        #set the desired properties
         game.set_difficulty(1)
-        game.set_paddle_height(self.paddle_slider.value)
-        game.run()
+
+        #start the game
+        self.start_game(game)
 
     def set_hard(self):
         #start the game with a hard difficulty
         game = PongGameBuilder()
+
+        #set the desired properties
         game.set_difficulty(2)
+
+        #start the game
+        self.start_game(game)
+
+    def start_game(self, game):
         game.set_paddle_height(self.paddle_slider.value)
+        game.set_name(self.player_name.text)
         game.run()
+        
 
 class PongGameBuilder(App):
     def build(self):
         game = PongGame()
-        game.set_difficulty(self.difficulty)
-        game.set_paddle_height(self.paddle_height)
-        game.serve_ball()
+        game.initialise(self.difficulty, self.paddle_height, self.player_name)
         Clock.schedule_interval(game.update, 1.0 / 60.0)
         self.popup = Popup(title='Pong', content=game, auto_dismiss=False)
         self.popup.open()
+
+    def set_name(self, name):
+        self.player_name = name
         
     def set_difficulty(self, difficulty):
         self.difficulty = difficulty
@@ -122,7 +138,6 @@ class PongApp(App):
     def build(self):
         menu = PongMenu()
         return menu
-
 
 if __name__ == '__main__':
     PongApp().run()

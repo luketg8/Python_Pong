@@ -15,19 +15,27 @@
             size:self.size
 
 <PongMenu>:
+    player_name: player1_name
     easy: easy_difficulty
     hard: hard_difficulty
     paddle_slider: paddle_height
 
     Label:
-        font_size: 70  
+        font_size: 75  
         center_x: root.width / 2
-        top: root.top - (root.height/10)
+        top: root.top - 5
         text: str("Welcome to Pong")
+
+    TextInput:
+        id: player1_name
+        center_x: root.width / 2
+        top: root.top - (root.height/5)
+        height: 50
+        text: str("Player 1")
 
     Button:
         id: easy_difficulty
-        font_size:35
+        font_size: 25
         on_press: root.set_easy()
         center_x: root.width / 2
         background_normal: ''
@@ -37,7 +45,7 @@
 
     Button:
         id: hard_difficulty
-        font_size:35
+        font_size: 25
         on_press: root.set_hard()
         background_normal: ''
         background_color: 1, 0, 0, 1.
@@ -66,6 +74,12 @@
             pos: self.center_x-5, 0
             size: 10, self.height
     
+    Label:
+        font_size: 20  
+        center_x: root.width / 4
+        top: root.top - 5
+        text: str(root.player1.name)
+
     Label:
         font_size: 70  
         center_x: root.width / 4
