@@ -13,8 +13,11 @@ class PongPaddle(Widget):
             vx, vy = ball.velocity
             offset = (ball.center_y - self.center_y) / (self.height / 2)
             bounced = Vector(-1 * vx, vy)
-            vel = bounced * 1.1
-            ball.velocity = vel.x, vel.y + offset
+            if (bounced.x < 8):
+                vel = bounced * 1.1
+                ball.velocity = vel.x, vel.y + offset
+            else:
+                ball.velocity = bounced.x, bounced.y + offset
 
 
 class PongBall(Widget):
@@ -25,8 +28,19 @@ class PongBall(Widget):
     def move(self):
         self.pos = Vector(*self.velocity) + self.pos
 
+class ChallengingPongBall(Widget):
+    velocity_x = NumericProperty(0)
+    velocity_y = NumericProperty(0)
+    velocity = ReferenceListProperty(velocity_x, velocity_y)
+
+    def move(self):
+        self.pos = Vector(*self.velocity) + self.pos
+
 
 class PongGame(Widget):
+    def __init__(self, difficulty):
+        self.difficulty = difficulty
+
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
@@ -63,7 +77,7 @@ class PongGame(Widget):
 
 class PongApp(App):
     def build(self):
-        game = PongGame()
+        game = PongGame(2)
         game.serve_ball()
         Clock.schedule_interval(game.update, 1.0 / 60.0)
         return game
