@@ -1,7 +1,7 @@
 from kivy.uix.widget import Widget
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty, StringProperty
-import PongBall
-import PongPaddle
+from game import PongBall
+from game import PongPaddle
 
 class PongGame(Widget):
     ball = ObjectProperty(None)
