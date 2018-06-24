@@ -21,6 +21,10 @@ class PongGame(Widget):
         #set the name of the player
         self.player1.name = playername
         self.player2.name = playername2
+        
+        #set the win counts for the players
+        self.player1.win_count = 0
+        self.player2.win_count = 0
 
         #start the game
         self.serve_ball()
@@ -47,6 +51,18 @@ class PongGame(Widget):
         if self.ball.x > self.width:
             self.player1.score += 1
             self.serve_ball(vel=(-4, 0))
+
+        #check for winner
+        if self.player1.score >= 5:
+            self.reset_scores()
+            self.player1.win_count  += 1
+        if self.player2.score >= 5:
+            self.reset_scores()
+            self.player2.win_count  += 1
+
+    def reset_scores(self):
+        self.player1.score = 0
+        self.player2.score = 0
 
     def on_touch_move(self, touch):
         if touch.x < self.width / 3:

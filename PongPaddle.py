@@ -4,6 +4,7 @@ from kivy.vector import Vector
 
 class PongPaddle(Widget):
     score = NumericProperty(0)
+    win_count = NumericProperty(0)
     name = StringProperty('')
 
     def bounce_ball(self, ball, velocity_multiplier):
