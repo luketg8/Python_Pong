@@ -12,6 +12,7 @@ class PongPaddle(Widget):
             offset = (ball.center_y - self.center_y) / (self.height / 2)
             bounced = Vector(-1 * vx, vy)
             
+            #set threshold for velocity
             if (bounced.x < 8 and bounced.x > -8):
                 vel = bounced * velocity_multiplier
                 ball.velocity = vel.x, vel.y + offset

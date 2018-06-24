@@ -16,6 +16,7 @@
 
 <PongMenu>:
     player_name: player1_name
+    player2_name: player2_name
     easy: easy_difficulty
     hard: hard_difficulty
     paddle_slider: paddle_height
@@ -28,10 +29,17 @@
 
     TextInput:
         id: player1_name
-        center_x: root.width / 2
+        center_x: root.width / 4
         top: root.top - (root.height/5)
         height: 50
         text: str("Player 1")
+
+    TextInput:
+        id: player2_name
+        center_x: root.width / 1.3
+        top: root.top - (root.height/5)
+        height: 50
+        text: str("Player 2")
 
     Button:
         id: easy_difficulty
@@ -79,6 +87,12 @@
         center_x: root.width / 4
         top: root.top - 5
         text: str(root.player1.name)
+
+    Label:
+        font_size: 20  
+        center_x: root.width * 3 / 4
+        top: root.top - 5
+        text: str(root.player2.name)
 
     Label:
         font_size: 70  

@@ -10,13 +10,14 @@ import PongGame
 class PongGameBuilder(App):
     def build(self):
         game = PongGame.PongGame()
-        game.initialise(self.difficulty, self.paddle_height, self.player_name)
+        game.initialise(self.difficulty, self.paddle_height, self.player_name, self.player2_name)
         Clock.schedule_interval(game.update, 1.0 / 60.0)
         self.popup = Popup(title='Pong', content=game, auto_dismiss=False)
         self.popup.open()
 
-    def set_name(self, name):
+    def set_names(self, name, name2):
         self.player_name = name
+        self.player2_name = name2
         
     def set_difficulty(self, difficulty):
         self.difficulty = difficulty

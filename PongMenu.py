@@ -25,7 +25,7 @@ class PongMenu(Widget):
 
     def start_game(self, game):
         game.set_paddle_height(self.paddle_slider.value)
-        game.set_name(self.player_name.text)
+        game.set_names(self.player_name.text, self.player2_name.text)
         game.run()
 
 if __name__ == '__main__':
